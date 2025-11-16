@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Friend Review Survey</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: #020617;
+      border-radius: 18px;
+      padding: 24px 20px 28px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      border: 1px solid #1f2937;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      margin-top: 18px;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      border-bottom: 1px solid #1f2937;
+      padding-bottom: 6px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px #38bdf8;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+
+    #start-btn,
+    #again-btn {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: #020617;
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
+    }
+
+    #start-btn:hover,
+    #again-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 35px rgba(56, 189, 248, 0.5);
+    }
+
+    .info-text {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+
+    .info-text-small {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .message {
+      font-size: 0.8rem;
+      margin-top: 6px;
+      min-height: 16px;
+    }
+
+    .message.success {
+      color: #4ade80;
+    }
+
+    .message.error {
+      color: #f97373;
+    }
+
+    /* Steps */
+
+    #name-step,
+    #rating-step {
+      margin-bottom: 10px;
+    }
+
+    .friend-banner {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .friend-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6b7280;
+    }
+
+    .friend-name-big {
+      margin-top: 4px;
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+
+    .question-card {
+      border-radius: 16px;
+      border: 1px solid #111827;
+      background: radial-gradient(circle at top, #020617, #020617 55%, #020617 100%);
+      padding: 24px 18px 24px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .progress-text {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+
+    .question-title {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+
+    .question-help {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      min-height: 18px;
+      margin-bottom: 10px;
+    }
+
+    .big-stars {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+      justify-content: center;
+    }
+
+    .big-star {
+      cursor: pointer;
+      font-size: 2.6rem;
+      user-select: none;
+      transition: transform 0.12s ease, opacity 0.12s ease, text-shadow 0.12s ease;
+    }
+
+    .big-star:hover {
+      transform: scale(1.12);
+      opacity: 0.9;
+      text-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
+    }
+
+    .big-star.active {
+      text-shadow: 0 0 15px rgba(56, 189, 248, 0.9);
+    }
+
+    .end-screen {
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .end-icon {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+
+    .end-title {
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .end-sub {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 8px 6px;
+      text-align: left;
+      border-bottom: 1px solid #111827;
+    }
+
+    th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b7280;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #020617;
+    }
+
+    .rank-badge {
+      font-size: 0.85rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #111827;
+      display: inline-block;
+    }
+
+    .stars-display {
+      font-size: 0.9rem;
+    }
+
+    .empty-state {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 600px) {
+      .question-card {
+        padding: 20px 14px 22px;
+      }
+      .friend-name-big {
+        font-size: 1.4rem;
+      }
+      .question-title {
+        font-size: 1.05rem;
+      }
+      .big-star {
+        font-size: 2.3rem;
+      }
+      th:nth-child(4),
+      td:nth-child(4) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Friend Review</h1>
+    <p class="subtitle">Rate each friend out of 3 stars on different traits. Data is stored only on this device.</p>
+
+    <!-- STEP 1: Name input -->
+    <div id="name-step">
+      <h2 class="section-title">Start a rating</h2>
+      <label for="friend-name">Friend's name</label>
+      <input id="friend-name" type="text" placeholder="Type the friend's name..." />
+      <button id="start-btn">Start rating</button>
+      <div class="info-text">You will answer one question at a time.</div>
+      <div id="name-message" class="message"></div>
+    </div>
+
+    <!-- STEP 2: Rating -->
+    <div id="rating-step" style="display:none;">
+      <div class="friend-banner">
+        <div class="friend-label">Rating</div>
+        <div class="friend-name-big" id="friend-display"></div>
+      </div>
+
+      <div id="question-card" class="question-card">
+        <div class="progress-text" id="progress-text"></div>
+        <div class="question-title" id="question-title"></div>
+        <div class="question-help" id="question-help"></div>
+        <div class="big-stars" id="big-stars"></div>
+      </div>
+
+      <div id="end-screen" class="end-screen" style="display:none;">
+        <div class="end-icon">✅</div>
+        <div class="end-title" id="end-title"></div>
+        <div class="end-sub">Your rating has been saved.</div>
+        <button id="again-btn">Rate another friend</button>
+      </div>
+
+      <div class="info-text-small">Tap a star to go to the next question.</div>
+      <div id="rating-message" class="message"></div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div>
+      <h2 class="section-title">Leaderboard</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Friend</th>
+            <th>Avg / 3</th>
+            <th>Stars</th>
+            <th>Ratings</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
+      <div id="empty-state" class="empty-state">No ratings yet.</div>
+    </div>
+  </div>
+
+  <script>
+    const traits = [
+      // 🔹 ORIGINAL QUESTIONS
+      {
+        key: "usefulness",
+        label: "Usefulness",
+        help: ""
+      },
+      {
+        key: "nice",
+        label: "Nice to be around",
+        help: ""
+      },
+      {
+        key: "funny",
+        label: "Funny score",
+        help: ""
+      },
+      {
+        key: "trust_savings",
+        label: "Trust with your life savings",
+        help: ""
+      },
+      {
+        key: "supportive",
+        label: "Supportive",
+        help: "Will actually be happy for you, not jealous."
+      },
+      {
+        key: "reliable",
+        label: "Reliability",
+        help: ""
+      },
+      {
+        key: "generous",
+        label: "Generous",
+        help: ""
+      },
+      {
+        key: "attitude",
+        label: "Attitude",
+        help: ""
+      },
+      {
+        key: "mutual_interests",
+        label: "Mutual interests",
+        help: ""
+      },
+      {
+        key: "self_aware",
+        label: "Self aware & humble",
+        help: "Can admit when they're wrong."
+      },
+      {
+        key: "independent",
+        label: "Independence & low maintenance",
+        help: ""
+      },
+
+      // 🔹 NEW NEUTRAL QUESTIONS (ADDED AT THE END)
+      {
+        key: "communication",
+        label: "Communication responsiveness",
+        help: "How good are they at replying in a reasonable time?"
+      },
+      {
+        key: "initiative",
+        label: "Initiative",
+        help: "Do they message first, check in, or suggest plans?"
+      },
+      {
+        key: "punctuality",
+        label: "Punctuality / respect for time",
+        help: "Do they show up on time or close to it?"
+      },
+      {
+        key: "stability",
+        label: "Emotional stability",
+        help: "How steady and consistent is their mood/behaviour?"
+      },
+      {
+        key: "conflict",
+        label: "Conflict handling",
+        help: "Do they stay calm and reasonable during disagreements?"
+      },
+      {
+        key: "feedback",
+        label: "Openness to feedback",
+        help: "Are they able to hear constructive criticism?"
+      },
+      {
+        key: "thoughtfulness",
+        label: "Thoughtfulness",
+        help: "Do they remember details and consider others?"
+      },
+      {
+        key: "trustworthiness",
+        label: "Trustworthiness",
+        help: "Can you trust them with normal private info?"
+      },
+      {
+        key: "maturity",
+        label: "Maturity",
+        help: "How well do they behave in adult situations (work, stress, plans, money, etc.)?"
+      }
+    ];
+
+    const friendNameInput = document.getElementById("friend-name");
+    const startBtn = document.getElementById("start-btn");
+    const nameStep = document.getElementById("name-step");
+    const ratingStep = document.getElementById("rating-step");
+    const friendDisplay = document.getElementById("friend-display");
+    const nameMessageEl = document.getElementById("name-message");
+    const ratingMessageEl = document.getElementById("rating-message");
+    const leaderboardBody = document.getElementById("leaderboard-body");
+    const emptyStateEl = document.getElementById("empty-state");
+
+    const questionCard = document.getElementById("question-card");
+    const progressText = document.getElementById("progress-text");
+    const questionTitle = document.getElementById("question-title");
+    const questionHelp = document.getElementById("question-help");
+    const bigStarsContainer = document.getElementById("big-stars");
+
+    const endScreen = document.getElementById("end-screen");
+    const endTitle = document.getElementById("end-title");
+    const againBtn = document.getElementById("again-btn");
+
+    let currentFriendName = "";
+    let currentIndex = 0;
+    let currentScores = {};
+
+    function clearMessages() {
+      nameMessageEl.textContent = "";
+      nameMessageEl.className = "message";
+      ratingMessageEl.textContent = "";
+      ratingMessageEl.className = "message";
+    }
+
+    function showNameMessage(text, type = "error") {
+      nameMessageEl.textContent = text;
+      nameMessageEl.className = "message " + type;
+    }
+
+    function loadData() {
+      try {
+        const raw = localStorage.getItem("friendRatings");
+        if (!raw) return {};
+        return JSON.parse(raw);
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveData(data) {
+      localStorage.setItem("friendRatings", JSON.stringify(data));
+    }
+
+    function ratingToStars(avg) {
+      const rounded = Math.round(avg);
+      return "★".repeat(rounded) + "☆".repeat(3 - rounded);
+    }
+
+    function updateLeaderboard(data) {
+      leaderboardBody.innerHTML = "";
+      const entries = Object.entries(data).map(([name, info]) => {
+        const avg = info.count === 0 ? 0 : info.sum / info.count;
+        return { name, avg, count: info.count };
+      });
+
+      entries.sort((a, b) => b.avg - a.avg);
+
+      if (entries.length === 0) {
+        emptyStateEl.style.display = "block";
+        return;
+      }
+
+      emptyStateEl.style.display = "none";
+
+      entries.forEach((entry, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="rank-badge">${index + 1}</span></td>
+          <td>${entry.name}</td>
+          <td>${entry.avg.toFixed(2)}</td>
+          <td>${ratingToStars(entry.avg)}</td>
+          <td>${entry.count}</td>`;
+        leaderboardBody.appendChild(tr);
+      });
+    }
+
+    function renderStars(key) {
+      bigStarsContainer.innerHTML = "";
+      for (let i = 1; i <= 3; i++) {
+        const star = document.createElement("span");
+        star.className = "big-star";
+        star.textContent = "☆";
+        star.dataset.value = i;
+        star.addEventListener("click", () => handleStarClick(key, i));
+        bigStarsContainer.appendChild(star);
+      }
+    }
+
+    function updateStarDisplay(key) {
+      const stars = bigStarsContainer.querySelectorAll(".big-star");
+      const value = currentScores[key] || 0;
+      stars.forEach(star => {
+        const v = Number(star.dataset.value);
+        star.textContent = v <= value ? "★" : "☆";
+        star.classList.toggle("active", v <= value);
+      });
+    }
+
+    function renderQuestion() {
+      clearMessages();
+      const trait = traits[currentIndex];
+      progressText.textContent = `Question ${currentIndex + 1} of ${traits.length}`;
+      questionTitle.textContent = trait.label;
+      questionHelp.textContent = trait.help || "";
+      renderStars(trait.key);
+      updateStarDisplay(trait.key);
+    }
+
+    function handleStarClick(key, value) {
+      currentScores[key] = value;
+      updateStarDisplay(key);
+
+      setTimeout(() => {
+        if (currentIndex < traits.length - 1) {
+          currentIndex++;
+          renderQuestion();
+        } else {
+          finishRating();
+        }
+      }, 180);
+    }
+
+    function finishRating() {
+      // make sure all traits got a score
+      for (const trait of traits) {
+        if (!currentScores[trait.key]) {
+          // jump back to first missing, just in case
+          currentIndex = traits.findIndex(t => !currentScores[t.key]);
+          renderQuestion();
+          return;
+        }
+      }
+
+      const total = traits.reduce((sum, t) => sum + currentScores[t.key], 0);
+      const avg = total / traits.length;
+
+      const data = loadData();
+
+      if (!data[currentFriendName]) data[currentFriendName] = { sum: 0, count: 0 };
+      data[currentFriendName].sum += avg;
+      data[currentFriendName].count++;
+
+      saveData(data);
+      updateLeaderboard(data);
+
+      questionCard.style.display = "none";
+      endScreen.style.display = "block";
+      endTitle.textContent = `Finished rating ${currentFriendName}!`;
+      ratingMessageEl.textContent = "Saved rating.";
+      ratingMessageEl.className = "message success";
+    }
+
+    function resetForAnother() {
+      currentFriendName = "";
+      currentIndex = 0;
+      currentScores = {};
+      friendNameInput.value = "";
+      nameStep.style.display = "block";
+      ratingStep.style.display = "none";
+      questionCard.style.display = "flex";
+      endScreen.style.display = "none";
+      clearMessages();
+    }
+
+    startBtn.addEventListener("click", () => {
+      clearMessages();
+      const name = friendNameInput.value.trim();
+      if (!name) return showNameMessage("Enter a name.");
+
+      currentFriendName = name;
+      currentIndex = 0;
+      currentScores = {};
+
+      friendDisplay.textContent = name;
+      nameStep.style.display = "none";
+      ratingStep.style.display = "block";
+      questionCard.style.display = "flex";
+      endScreen.style.display = "none";
+      renderQuestion();
+    });
+
+    againBtn.addEventListener("click", resetForAnother);
+
+    // Init
+    updateLeaderboard(loadData());
+  </script>
+</body>
+</html>
